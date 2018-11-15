@@ -1,6 +1,6 @@
 {
     "name": "@visionjs/core",
-    "version": "1.0.0-alpha.0",
+    "version": "1.0.1-alpha.0",
     "publishConfig": {
         "access": "public"
     },
@@ -53,6 +53,8 @@
         "rollup-plugin-url": "^1.4.0",
         "typescript": "^2.8.3"
     },
-    "files": [ "dist" ],
+    "files": [
+        "dist"
+    ],
     "gitHead": "d9880bab6be845f90c016937ea3a1ecace2cc712"
 }
