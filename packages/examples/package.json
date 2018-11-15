@@ -1,0 +1,18 @@
+{
+    "name": "examples",
+    "version": "1.0.0-alpha.0",
+    "private": true,
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "x0 ./examples"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@compositor/x0": "^6.0.7",
+        "core": "^1.0.0",
+        "recompose": "^0.30.0"
+    }
+}
