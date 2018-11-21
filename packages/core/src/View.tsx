@@ -2,11 +2,11 @@ import * as React from 'react'
 import { Renderer, SetterType } from './Types'
 import { ViewContext, EditorContext } from './contexts'
 
-type Props = { id: string; defaultRenderer: Renderer }
+type Props = { id: string; defaultRenderer: Renderer; propsListener: (props: object) => void }
 
 export default class View extends React.Component<Props> {
     render() {
-        const { id, defaultRenderer } = this.props
+        const { id, defaultRenderer, propsListener } = this.props
         const Comp = defaultRenderer as any
 
         return (
@@ -41,29 +41,31 @@ export default class View extends React.Component<Props> {
 
                                 let element = null
 
-                                if (!node || node.type === undefined) {
-                                    const props = (node && node.props) || {}
+                                const props = node.props || {}
 
+                                if (typeof propsListener === 'function') {
+                                    propsListener(props)
+                                }
+
+                                if (node.type === undefined) {
                                     element = <Comp {...props} readonly={readonly} requestUpdateProps={setProps} />
                                 } else if (node.type !== null) {
                                     element = rendererMap[node.type](node.props || {}, readonly, setProps)
                                 } else {
+                                    //TODO add prop: emptyRenderer
+                                    element = null
                                 }
 
                                 if (!readonly && Compositor) {
                                     element = (
-                                        <Compositor
-                                            setter={set.bind(null, id)}
-                                            rendererMap={rendererMap}
-                                            node={node || { id }}
-                                        >
+                                        <Compositor setter={set.bind(null, id)} rendererMap={rendererMap} node={node}>
                                             {element}
                                         </Compositor>
                                     )
                                 }
 
                                 return (
-                                    <ViewContext.Provider value={{ children: node && node.children, set: lens }}>
+                                    <ViewContext.Provider value={{ children: node.children, set: lens }}>
                                         {element}
                                     </ViewContext.Provider>
                                 )
