@@ -4,7 +4,7 @@ import { Editor, Data } from 'core'
 export default class ExampleEditor extends Component {
     state = {
         data: new Data(),
-        readonly: true,
+        readonly: false,
         showData: true,
     }
 

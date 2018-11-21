@@ -27,6 +27,7 @@ export default class Text extends Component {
 
     render() {
         const { requestUpdateProps, content = 'input...', readonly, ...rest } = this.props
+        // console.log('render text: ', content)
 
         let style = rest.style || {}
 

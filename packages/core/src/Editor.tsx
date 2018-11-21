@@ -35,7 +35,7 @@ const Editor = ({
             <ViewContext.Provider
                 value={{
                     children: data.value,
-                    set: (id, setter) => {
+                    setter: () => (id, setter) => {
                         onChange((data as Data).produce(id, setter))
                     },
                 }}
