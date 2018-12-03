@@ -5,5 +5,4 @@ export const ViewContext = React.createContext<ViewContextType>({ children: {} }
 
 export const EditorContext = React.createContext<EditorContextType>({
     readonly: true,
-    rendererMap: {},
 })

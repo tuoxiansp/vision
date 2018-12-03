@@ -12,7 +12,7 @@
     "license": "ISC",
     "dependencies": {
         "@compositor/x0": "^6.0.7",
-        "core": "^1.0.0",
+        "@visionjs/core": "^1.0.1-alpha.0",
         "recompose": "^0.30.0"
     }
 }

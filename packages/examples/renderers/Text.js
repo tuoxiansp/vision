@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Editor, View } from 'core'
+import { Editor, View } from '@visionjs/core'
 
 export default class Text extends Component {
     constructor(...args) {

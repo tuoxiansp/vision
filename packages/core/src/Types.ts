@@ -37,6 +37,6 @@ export type RendererMap = {
 
 export type EditorContextType = {
     readonly: boolean
-    rendererMap: RendererMap
+    rendererMap?: RendererMap
     Compositor?: CompositorType
 }
