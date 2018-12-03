@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Editor, Data } from 'core'
+import { Editor, Data } from '@visionjs/core'
 
 export default class ExampleEditor extends Component {
     state = {
         data: new Data(),
-        readonly: true,
+        readonly: false,
         showData: true,
     }
 

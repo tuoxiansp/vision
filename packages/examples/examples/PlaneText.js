@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View } from 'core'
+import { View } from '@visionjs/core'
 import Text from '../renderers/Text'
 import Editor from '../common/Editor'
 import { defaultProps } from 'recompose'

@@ -24,9 +24,11 @@ export type CompositorType = React.ComponentType<CompositorPropType>
 
 export type SetterType = (node: Node) => Node
 
+export type set = (id: string, setter: SetterType) => void
+
 export type ViewContextType = {
     children?: ChildMap
-    set?: (id: string, setter: SetterType) => void
+    setter?: () => set
 }
 
 export type RendererMap = {
@@ -35,6 +37,6 @@ export type RendererMap = {
 
 export type EditorContextType = {
     readonly: boolean
-    rendererMap: RendererMap
+    rendererMap?: RendererMap
     Compositor?: CompositorType
 }
