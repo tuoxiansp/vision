@@ -21,7 +21,7 @@ export default class Data {
         this.value = produce(
             this.value,
             (data) => {
-                data[id] = setter(data[id] || { id })
+                data[id] = setter(data[id])
             },
             this.patchListener
         )

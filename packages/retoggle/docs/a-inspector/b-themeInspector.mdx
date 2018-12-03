@@ -1,0 +1,56 @@
+---
+name: Theming Inspector
+menu: Inspector
+route: /theming-the-inspector
+---
+
+import { Playground } from "docz";
+import { Inspector, DarkTheme } from "../../src/lib";
+
+### Theming
+
+The inspector and the controls can be themed by passing an object as shown below to the `theme` prop of the inspector component.
+
+```javascript
+const CustomTheme = {
+  primaryColor: string;
+  backgroundColor: string;
+  collapseHandle: {
+    backgroundColor: string;
+    color: string;
+  };
+  knob: {
+    label: {
+      color: string;
+      dividerColor: string;
+    };
+    slider: {
+      railColor: string;
+      handleColor: string;
+      activeTrackColor: string;
+    };
+  };
+  log: {
+    objectViewerTheme: string;
+    label: {
+      color: string;
+      dividerColor: string;
+    };
+  };
+}
+```
+
+#### In-built dark theme
+
+Retoggle ships with a default dark theme.
+
+#### Usage
+
+```javascript
+import { DarkTheme } from "retoggle";
+<Inspector theme={DarkTheme} usePortal={false} />
+```
+
+<Playground>
+  <Inspector theme={DarkTheme} usePortal={false} />
+</Playground>

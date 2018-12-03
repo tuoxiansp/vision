@@ -1,0 +1,65 @@
+---
+name: Getting started
+route: /
+---
+
+import { Playground } from "docz";
+import image from "./Retoggle.png";
+import App from "../src/example/app.tsx";
+
+## Retoggle
+
+<Playground>
+  {() => {
+    return <App />;
+  }}
+</Playground>
+
+<img src="https://img.shields.io/travis/Raathigesh/retoggle.svg?style=flat-square" />
+<img src="https://img.shields.io/github/license/Raathigesh/retoggle.svg?style=flat-square" />
+<img src="https://img.shields.io/npm/v/retoggle.svg?style=flat-square" />
+
+Retoggle is a collection of React hooks which provides UI toggles to manipulate your component state from outside. This library is inspired by [ideas from Dan Abramov](https://twitter.com/dan_abramov/status/1058834904207761409).
+
+- 🎉 A wide range of knobs
+- 💡 Frictionless integration
+- 🎨 Themeable components
+- 🎁 Extensible. Write your custom knobs.
+
+### Avilable knobs
+
+- 📝 `useLog()` - Keeps track of a variable value
+- 🅰 `useTextKnob()` - Shows a text box
+- 1️⃣ `useNumberKnob()` - Shows a number box
+- ✅️ `useBooleanKnob()` - Shows a check box
+- 🎚 `useRangeKnob()` - Shows a slider
+- 🎛 `useRangesKnob()` - Shows multiple sliders
+- 🎏 `useSelectKnob()` - Shows a select box
+- ⚒ `useObjectKnob()` - Shows an object editor
+- 🎨 `useColorKnob()` - Shows a color picker
+- ⏰ `useTimemachine()` - Shows a slider and tracks the state of a given variable and allows to travel back in time
+
+#### 📚 [API Docs with live preview available here.](https://retoggle.debuggable.io)
+
+## Github
+Take a look at [the code here](https://github.com/raathigesh/retoggle).
+
+## Contribute
+
+### Preparing dev environment
+
+- `yarn install` to install dev dependencies
+
+### Running and building the library
+
+- `yarn start` will start the dev server and expose the sample app
+- `yarn build` will output the build artifact to `./lib` folder
+
+### Docs
+
+- `docz:dev` will start the docz developement server
+- `docz:build` will build the docs
+
+## License
+
+MIT

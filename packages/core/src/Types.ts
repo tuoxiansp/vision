@@ -1,28 +1,36 @@
-import { ReactNode, ComponentClass, StatelessComponent } from 'react'
+import { ComponentType, ReactNode } from 'react'
 
 export type ChildMap = {
-    [K: string]: Node | undefined
+    [K: string]: Anchor | undefined
+}
+
+export type Anchor = {
+    id: string
+    nodes: Node[]
 }
 
 export type Node = {
-    id: string
-    type?: string | null
+    type?: string
     props?: object
-    children?: ChildMap
+    anchors?: ChildMap
 }
 
-export type Renderer = (props: object, readonly: boolean, requestUpdateProps: (props: object) => void) => ReactNode
+// export type Renderer = (props: object, readonly: boolean, requestUpdateProps: (props: object) => void) => ReactNode
+export type Renderer = ComponentType<{
+    readonly: boolean
+    requestUpdateProps: (props: object) => void
+}>
 
 type CompositorPropType = {
-    setter: SetterType
+    set: (setter: (nodes: Node[]) => Node[]) => void
     rendererMap: RendererMap
-    node: Node
-    children: ReactNode
+    nodes: Node[]
+    children: (operations: object[]) => ReactNode
 }
 
-export type CompositorType = React.ComponentType<CompositorPropType>
+export type CompositorType = ComponentType<CompositorPropType>
 
-export type SetterType = (node: Node) => Node
+export type SetterType = (anchor: Anchor | undefined) => Anchor
 
 export type ViewContextType = {
     children?: ChildMap
@@ -37,4 +45,5 @@ export type EditorContextType = {
     readonly: boolean
     rendererMap: RendererMap
     Compositor?: CompositorType
+    operations?: { [K: string]: [any, (value: any) => void] }
 }

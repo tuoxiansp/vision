@@ -1,0 +1,42 @@
+---
+name: useSelectKnob
+menu: Knobs
+route: /use-select-knob
+---
+
+import { useState } from "react";
+import { Playground } from "docz";
+import { Inspector, useSelectKnob } from "../../src/lib";
+
+### useSelectKnob(label, options, initialValue)
+
+Displays a select box with options. Returns the selected option and a method to change the selecion.
+
+- `label` - A label for the select box
+- `options` - A array of strings or numbers which should be displayed as options
+- `initialValue` - A value from the options array to use as the initial value
+
+#### Usage
+
+```javascript
+import { useSelectKnob } from "retoggle";
+```
+
+<Playground>
+{() => {
+     const [selectedOption, setSelection] = useSelectKnob(
+        "Select",
+        ["Orange", "Apple"],
+        "Apple"
+    );
+
+    return (
+        <React.Fragment>
+            <Inspector usePortal={false}/>
+            {selectedOption}
+        </React.Fragment>
+    )
+
+}}
+
+</Playground>

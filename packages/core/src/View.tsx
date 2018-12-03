@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Renderer, SetterType } from './Types'
+import { SetterType, Anchor, Renderer } from './Types'
 import { ViewContext, EditorContext } from './contexts'
 
 type Props = { id: string; defaultRenderer: Renderer; propsListener: (props: object) => void }
@@ -7,7 +7,8 @@ type Props = { id: string; defaultRenderer: Renderer; propsListener: (props: obj
 export default class View extends React.Component<Props> {
     render() {
         const { id, defaultRenderer, propsListener } = this.props
-        const Comp = defaultRenderer as any
+
+        const createEmptyAnchor = (): Anchor => ({ id, nodes: [ {} ] })
 
         return (
             <EditorContext.Consumer>
@@ -15,60 +16,101 @@ export default class View extends React.Component<Props> {
                     return (
                         <ViewContext.Consumer>
                             {({ children, set = () => {} }) => {
-                                const node = (children && children[id]) || { id }
+                                const anchor = (children && children[id]) || createEmptyAnchor()
+                                function getElements(operations: object[]) {
+                                    const elements = anchor.nodes.map((node, index): React.ReactNode => {
+                                        const setProps = !readonly
+                                            ? (props: object) => {
+                                                  set(id, (anchor = createEmptyAnchor()) => {
+                                                      const localNode = anchor.nodes[index] || { ...node }
+                                                      if (!localNode.props) {
+                                                          localNode.props = {}
+                                                      }
 
-                                const setProps = !readonly
-                                    ? (props: object) => {
-                                          set(id, (node = { id }) => {
-                                              node.props = props
+                                                      Object.keys(props).forEach((key) => {
+                                                          return ((localNode.props as object)[key] = props[key])
+                                                      })
 
-                                              return node
-                                          })
-                                      }
-                                    : () => {}
+                                                      anchor.nodes[index] = localNode
 
-                                const lens = (childId: string, childSetter: SetterType): void => {
-                                    set(id, (node = { id }) => {
-                                        if (!node.children) {
-                                            node.children = {}
+                                                      return anchor
+                                                  })
+                                              }
+                                            : () => {}
+
+                                        const lens = (childId: string, childSetter: SetterType): void => {
+                                            set(id, (anchor = createEmptyAnchor()) => {
+                                                const localNode = anchor.nodes[index] || { ...node }
+
+                                                if (!localNode.anchors) {
+                                                    localNode.anchors = {}
+                                                }
+
+                                                localNode.anchors[childId] = childSetter(localNode.anchors[childId])
+                                                anchor.nodes[index] = localNode
+
+                                                return anchor
+                                            })
                                         }
 
-                                        node.children[childId] = childSetter(node.children[childId] || { id })
+                                        let element = null
 
-                                        return node
+                                        const operation = operations[index] || {}
+
+                                        const props = { ...node.props || {}, ...operation }
+
+                                        if (typeof propsListener === 'function') {
+                                            propsListener(props)
+                                        }
+
+                                        if (!node.type && defaultRenderer) {
+                                            const Comp = defaultRenderer
+                                            element = (
+                                                <Comp {...props} readonly={readonly} requestUpdateProps={setProps} />
+                                            )
+                                        } else if (node.type) {
+                                            const Comp = rendererMap[node.type]
+                                            if (!Comp) {
+                                                throw new Error('Can not find renderer of ' + node.type)
+                                            }
+                                            element = (
+                                                <Comp {...props} readonly={readonly} requestUpdateProps={setProps} />
+                                            )
+                                        } else {
+                                            console.warn('Something is wrong. Node.type should not be null')
+                                            element = null
+                                        }
+
+                                        return (
+                                            <ViewContext.Provider value={{ children: node.anchors, set: lens }}>
+                                                {element}
+                                            </ViewContext.Provider>
+                                        )
                                     })
+
+                                    return elements
                                 }
-
-                                let element = null
-
-                                const props = node.props || {}
-
-                                if (typeof propsListener === 'function') {
-                                    propsListener(props)
-                                }
-
-                                if (node.type === undefined) {
-                                    element = <Comp {...props} readonly={readonly} requestUpdateProps={setProps} />
-                                } else if (node.type !== null) {
-                                    element = rendererMap[node.type](node.props || {}, readonly, setProps)
-                                } else {
-                                    //TODO add prop: emptyRenderer
-                                    element = null
-                                }
-
                                 if (!readonly && Compositor) {
-                                    element = (
-                                        <Compositor setter={set.bind(null, id)} rendererMap={rendererMap} node={node}>
-                                            {element}
+                                    return (
+                                        <Compositor
+                                            set={(setter) => {
+                                                set(id, (anchor = createEmptyAnchor()) => {
+                                                    anchor.nodes = setter(anchor.nodes)
+
+                                                    return anchor
+                                                })
+                                            }}
+                                            rendererMap={rendererMap}
+                                            nodes={anchor.nodes}
+                                        >
+                                            {(operations) => {
+                                                return getElements(operations)
+                                            }}
                                         </Compositor>
                                     )
                                 }
 
-                                return (
-                                    <ViewContext.Provider value={{ children: node.children, set: lens }}>
-                                        {element}
-                                    </ViewContext.Provider>
-                                )
+                                return getElements([])
                             }}
                         </ViewContext.Consumer>
                     )
