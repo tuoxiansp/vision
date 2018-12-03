@@ -33,8 +33,8 @@ export type CompositorType = ComponentType<CompositorPropType>
 export type SetterType = (anchor: Anchor | undefined) => Anchor
 
 export type ViewContextType = {
-    children?: ChildMap
-    set?: (id: string, setter: SetterType) => void
+    childMap?: ChildMap
+    getSetter?: () => (id: string, setter: SetterType) => void
 }
 
 export type RendererMap = {
@@ -43,7 +43,8 @@ export type RendererMap = {
 
 export type EditorContextType = {
     readonly: boolean
-    rendererMap: RendererMap
+    rendererMap?: RendererMap
     Compositor?: CompositorType
-    operations?: { [K: string]: [any, (value: any) => void] }
+    operations: { [K: string]: [any, (value: any) => void] }
+    operate: (operation: string, value: any) => void
 }

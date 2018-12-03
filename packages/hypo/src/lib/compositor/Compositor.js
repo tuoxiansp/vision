@@ -45,7 +45,7 @@ const initCompositor = (maps = []) =>
 
             return (
                 <Consumer>
-                    {({ operations: { focused: [ focused = 0, focus ] } }) => {
+                    {({ operations: { focused = 0 }, operate }) => {
                         const operations = []
                         if (this.state.focused === focused) {
                             operations[this.state.focusedIndex] = { focused: true }
@@ -57,6 +57,7 @@ const initCompositor = (maps = []) =>
                                 {nodes.map((node, index) => {
                                     return (
                                         <Modifier
+                                            key={index}
                                             onMouseEnter={() => {
                                                 this.setState({
                                                     hovered: index,
@@ -70,7 +71,7 @@ const initCompositor = (maps = []) =>
                                             onMouseDown={() => {
                                                 const next = focused + 1
                                                 this.setState({ focused: next, focusedIndex: index })
-                                                focus(next)
+                                                operate('focused', next)
                                             }}
                                             surface={childs[index]}
                                         >

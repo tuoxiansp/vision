@@ -1,16 +1,16 @@
 import React from 'react'
 import { Layout as AntdLayout, Menu, Breadcrumb, Icon } from 'antd'
 import { View } from '@visionjs/core'
-// import useText from './lib/knobs/useText'
+import useText from './lib/knobs/useText'
+import { useTextKnob } from 'retoggle'
 
 const { SubMenu } = Menu
 const { Header, Content, Footer, Sider } = AntdLayout
 
 const FooterRenderer = (props) => {
-    // const [ text ] = useText('Footer', 'content', props)
-    // const [ text ] = useTextKnob('Footer', 'vision')
+    const [ text ] = useText('Footer', 'content', props)
 
-    return <span>{'vision'}</span>
+    return <span>{text || 'default'}</span>
 }
 
 function Layout() {

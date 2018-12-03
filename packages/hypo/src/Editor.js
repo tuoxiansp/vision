@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Editor as VisionEditor, Data } from '@visionjs/core'
-import { useBooleanKnob, useLog } from '@visionjs/inspector'
+import { useBooleanKnob, useLog } from 'retoggle'
 import initCompositor from './lib/compositor/Compositor'
 import Layout from './Layout'
 
@@ -13,13 +13,7 @@ function Editor() {
     useLog('Data', data.value)
 
     return (
-        <VisionEditor
-            data={new Data()}
-            onChange={setData}
-            readonly={true}
-            operations={[ 'focused' ]}
-            Compositor={Compositor}
-        >
+        <VisionEditor data={data} onChange={setData} readonly={readonly} Compositor={Compositor}>
             <Layout />
         </VisionEditor>
     )

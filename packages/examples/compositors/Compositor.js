@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom'
 import Modifier from './Modifier'
 import { EditorContext } from '@visionjs/core'
 import Popup from 'reactjs-popup'
-import { Inspector } from 'retoggle'
 
 const { Consumer } = EditorContext
 
@@ -46,7 +45,7 @@ const initCompositor = (maps = []) =>
 
             return (
                 <Consumer>
-                    {({ operations: { focused: [ focused = 0, focus ] } }) => {
+                    {({ operations: { focused = 0 }, operate }) => {
                         const operations = []
                         if (this.state.focused === focused) {
                             operations[this.state.focusedIndex] = { focused: true }
@@ -55,7 +54,6 @@ const initCompositor = (maps = []) =>
 
                         return (
                             <Fragment>
-                                <Inspector usePortal={false} />
                                 {nodes.map((node, index) => {
                                     return (
                                         <Modifier
@@ -72,7 +70,7 @@ const initCompositor = (maps = []) =>
                                             onMouseDown={() => {
                                                 const next = focused + 1
                                                 this.setState({ focused: next, focusedIndex: index })
-                                                focus(next)
+                                                operate('focused', next)
                                             }}
                                             surface={childs[index]}
                                         >

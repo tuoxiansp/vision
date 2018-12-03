@@ -27,7 +27,7 @@ export default class Modifier extends Component {
         }
     }
 
-    handleMouseDown = (event) => {
+    handleDblClick = (event) => {
         if (this.props.onMouseDown instanceof Function) {
             this.props.onMouseDown(event)
         }
@@ -39,7 +39,7 @@ export default class Modifier extends Component {
         if (this.dom) {
             this.dom.addEventListener('mouseenter', this.handleMouseEnter)
             this.dom.addEventListener('mouseleave', this.handleMouseLeave)
-            this.dom.addEventListener('mousedown', this.handleMouseDown)
+            this.dom.addEventListener('dblclick', this.handleDblClick)
         }
     }
 
@@ -47,7 +47,7 @@ export default class Modifier extends Component {
         if (this.dom) {
             this.dom.removeEventListener('mouseenter', this.handleMouseEnter)
             this.dom.removeEventListener('mouseleave', this.handleMouseLeave)
-            this.dom.removeEventListener('mousedown', this.handleMouseDown)
+            this.dom.removeEventListener('dblclick', this.handleDblClick)
         }
     }
 
@@ -57,14 +57,14 @@ export default class Modifier extends Component {
             if (this.dom) {
                 this.dom.removeEventListener('mouseenter', this.handleMouseEnter)
                 this.dom.removeEventListener('mouseleave', this.handleMouseLeave)
-                this.dom.removeEventListener('mousedown', this.handleMouseDown)
+                this.dom.removeEventListener('dblclick', this.handleDblClick)
             }
             this.dom = dom
             this.forceUpdate()
             if (this.dom) {
                 this.dom.addEventListener('mouseenter', this.handleMouseEnter)
                 this.dom.addEventListener('mouseleave', this.handleMouseLeave)
-                this.dom.addEventListener('mousedown', this.handleMouseDown)
+                this.dom.addEventListener('dblclick', this.handleDblClick)
             }
         }
     }
