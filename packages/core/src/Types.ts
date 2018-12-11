@@ -15,7 +15,6 @@ export type Node = {
     anchors?: ChildMap
 }
 
-// export type Renderer = (props: object, readonly: boolean, requestUpdateProps: (props: object) => void) => ReactNode
 export type Renderer = ComponentType<{
     readonly: boolean
     requestUpdateProps: (props: object) => void

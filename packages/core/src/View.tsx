@@ -2,7 +2,7 @@ import * as React from 'react'
 import { SetterType, Anchor, Renderer, ViewContextType, EditorContextType } from './Types'
 import { ViewContext, EditorContext } from './contexts'
 
-type Props = { id: string; defaultRenderer: Renderer; propsListener: (props: object) => void }
+type Props = { id: string; renderer: Renderer }
 
 const emptyGetSetter = () => () => {}
 
@@ -71,8 +71,7 @@ class V extends React.Component<VProps> {
     render() {
         const {
             id,
-            defaultRenderer,
-            propsListener,
+            renderer,
             childMap,
             getSetter = emptyGetSetter,
             readonly,
@@ -108,12 +107,8 @@ class V extends React.Component<VProps> {
 
                 const props = { ...node.props || {}, ...operation }
 
-                if (typeof propsListener === 'function') {
-                    propsListener(props)
-                }
-
-                if (!node.type && defaultRenderer) {
-                    const Comp = defaultRenderer
+                if (!node.type && renderer) {
+                    const Comp = renderer
                     element = <Comp {...props} readonly={readonly} requestUpdateProps={setProps} />
                 } else if (node.type) {
                     const Comp = rendererMap[node.type]

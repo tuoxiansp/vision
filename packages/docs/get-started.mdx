@@ -1,0 +1,62 @@
+---
+name: Get Started
+route: /get-started
+---
+
+import { Playground } from 'docz'
+import { useState } from 'react'
+import { Editor, View, Data } from '@visionjs/core'
+
+## `<Editor>`
+A do-nothing editor:
+
+<Playground>
+    {() => {
+        const [ data, setData ] = useState(new Data())
+
+        return (
+            <Editor data={data} onChange={setData}>
+                <h1>I'm big title .</h1>
+                <span>description</span>
+            </Editor>
+        )
+    }}
+</Playground>
+
+## `<View>`
+You can use `<View>` to mount "renderers" that provide editorial abilities.
+
+```javascript
+import { Editor, View, Data } from '@visionjs/core'
+import React, { useState } from 'react'
+import { defaultProps } from 'recompose'
+import Text from '../../renderers/Text'
+
+const Title = defaultProps({ content: 'title' })(Text)
+const Description = defaultProps({ content: 'description' })(Text)
+
+export const Editable = () => {
+    const [ data, setData ] = useState(new Data())
+
+    return (
+        <Editor data={data} onChange={setData}>
+            <h1>
+                <View id="title" renderer={Title} />
+            </h1>
+            <View id="desccription" renderer={Description} />
+        </Editor>
+    )
+}
+```
+
+import { Editable } from './src/examples/get-started/Editor'
+
+<Playground>
+    <Editable></Editable>
+</Playground>
+
+## Self-edit Component
+
+## Compositor
+
+## Registed Component

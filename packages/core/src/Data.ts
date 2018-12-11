@@ -44,7 +44,7 @@ export default class Data {
     }
 
     get undoable() {
-        return this.inversePatchesStack.length > 0
+        return this.inversePatchesStack.length
     }
 
     redo() {
@@ -56,6 +56,6 @@ export default class Data {
     }
 
     get redoable() {
-        return this.hadInversedPatchesStack.length > 0
+        return this.hadInversedPatchesStack.length
     }
 }

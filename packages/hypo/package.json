@@ -5,7 +5,6 @@
     "dependencies": {
         "@visionjs/core": "^1.0.1-alpha.0",
         "@visionjs/inspector": "^1.0.0",
-        "@visionjs/retoggle": "^0.2.0",
         "antd": "^3.10.9",
         "react": "^16.7.0-alpha.2",
         "react-dom": "^16.7.0-alpha.2",
@@ -22,10 +21,5 @@
     "eslintConfig": {
         "extends": "react-app"
     },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ]
+    "browserslist": [ ">0.2%", "not dead", "not ie <= 11", "not op_mini all" ]
 }
