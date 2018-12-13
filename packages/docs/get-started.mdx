@@ -1,0 +1,105 @@
+---
+name: Get Started
+route: /get-started
+---
+
+import { Playground } from 'docz'
+import { useState, Fragment } from 'react'
+import { Editor, View, Data } from '@visionjs/core'
+
+## `<Editor>`
+> Create your own editor.
+
+A do-nothing editor:
+
+<Playground>
+    {() => {
+        const [ data, setData ] = useState(new Data())
+
+        return (
+            <Editor data={data} onChange={setData}>
+                <h1>title</h1>
+                <span>description</span>
+            </Editor>
+        )
+    }}
+</Playground>
+
+## `<View>`
+> Use existed renderers.
+
+You can use `<View>` to mount "renderers" that provide editorial abilities.
+
+import Text from './src/renderers/Text'
+import defaultProps from './src//utils/defaultProps'
+
+<Playground>
+    {() => {
+        const [ data, setData ] = useState(new Data())
+
+        return (
+            <Editor data={data} onChange={setData}>
+                <h1>
+                    <View id="title" render={defaultProps({ content: 'title' })(Text)} />
+                </h1>
+                <View id="description" render={defaultProps({ content: 'description' })(Text)} />
+            </Editor>
+        )
+    }}
+</Playground>
+
+## Self-edit Renderer
+> Customize renderers.
+
+Now let's add a selectable background color. We'll need to customize the renderer.  
+
+And Trust me, it's crazy simple.
+
+<Playground>
+    {() => {
+        const [ data, setData ] = useState(new Data())
+
+        return (
+            <Editor data={data} onChange={setData}>
+                <View id="hero" render={({readonly, requestUpdateProps, props}) => {
+                    const rainbow = [ '#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#8B00FF' ]
+
+                    return <div style={{
+                        backgroundColor: props.bgColor || '#FFF',
+                        position: 'relative'
+                    }}>
+                        {!readonly && (
+                            <div style={{ position: 'absolute', right: 42, top: 12 }}>
+                                {rainbow.map((color) => {
+                                    return (
+                                        <div
+                                            style={{
+                                                display: 'inline-block',
+                                                background: color,
+                                                width: 20,
+                                                height: 20,
+                                            }}
+                                            onClick={() => {
+                                                requestUpdateProps({ bgColor: color })
+                                            }}
+                                        />
+                                    )
+                                })}
+                            </div>
+                        )}
+                        <h1>
+                            <View id="title" render={defaultProps({ content: 'title' })(Text)} />
+                        </h1>
+                        <View id="description" render={defaultProps({ content: 'description' })(Text)} />
+                    </div> 
+                }}></View>
+            </Editor>
+        )
+    }}
+</Playground>
+
+## Compositor
+Coming soon...
+
+## Registed Renderer
+Coming soon...

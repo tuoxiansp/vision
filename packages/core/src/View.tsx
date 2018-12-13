@@ -1,115 +1,158 @@
 import * as React from 'react'
-import { Renderer, SetterType, Node } from './Types'
+import { SetterType, Anchor, Renderer, ViewContextType, EditorContextType } from './Types'
 import { ViewContext, EditorContext } from './contexts'
 
-type Props = {
-    id: string
-    defaultRenderer: Renderer
-    propsListener?: (props: object, ...rest: any[]) => void
-}
+type Props = { id: string; render: Renderer }
 
-function shallowDiffers(a: object, b: object) {
+const emptyGetSetter = () => () => {}
+
+const shallowDiffers = (a: object, b: object) => {
     for (let i in a) if (!(i in b)) return true
     for (let i in b) if (a[i] !== b[i]) return true
     return false
 }
 
-class V extends React.Component {
-    getLens: () => any
+type VProps = ViewContextType & EditorContextType & Props
 
-    constructor(props: Props) {
-        super(props)
+type LensGetter = (index: number) => () => ((childId: string, childSetter: SetterType) => void)
 
-        this.getLens = () => {
-            const { id } = this.props as any
-            const { setter } = this.context
-
-            const lens = (childId: string, childSetter: SetterType): void => {
-                setter()(id, (node: Node = { id }) => {
-                    if (!node.children) {
-                        node.children = {}
-                    }
-
-                    node.children[childId] = childSetter(node.children[childId] || { id })
-
-                    return node
-                })
+class V extends React.Component<VProps> {
+    getLens: LensGetter
+    createEmptyAnchor: () => Anchor
+    cache: object = {}
+    memorize(f: Function): Function {
+        return (arg: any) => {
+            if (!this.cache[arg]) {
+                this.cache[arg] = f.call(this, arg)
             }
 
-            return lens
+            return this.cache[arg]
         }
     }
 
-    shouldComponentUpdate(prevProps: any) {
-        const prev = { ...prevProps, children: prevProps.children[prevProps.id] }
-        const props = this.props as any
-        const curr = { ...props, children: props.children[props.id] }
+    constructor(props: any) {
+        super(props)
 
-        return shallowDiffers(prev, curr)
+        const createEmptyAnchor = (): Anchor => ({ id: this.props.id, nodes: [ {} ] })
+        this.createEmptyAnchor = createEmptyAnchor
+
+        this.getLens = this.memorize((index: number) => () => {
+            const { id, getSetter = emptyGetSetter } = this.props
+
+            return (childId: string, childSetter: SetterType): void => {
+                getSetter()(id, (anchor = createEmptyAnchor()) => {
+                    const node = anchor.nodes[index]
+
+                    if (!node.anchors) {
+                        node.anchors = {}
+                    }
+
+                    node.anchors[childId] = childSetter(node.anchors[childId])
+                    anchor.nodes[index] = node
+
+                    return anchor
+                })
+            }
+        }) as LensGetter
+    }
+
+    shouldComponentUpdate(prevProps: VProps) {
+        const prev = {
+            ...prevProps,
+            childMap: prevProps.childMap && prevProps.childMap[prevProps.id],
+            operations: undefined,
+        }
+        const props = this.props
+        const curr = { ...props, childMap: props.childMap && props.childMap[props.id], operations: undefined }
+
+        return shallowDiffers(prev, curr) || shallowDiffers(prevProps.operations, props.operations)
     }
 
     render() {
-        const { id, defaultRenderer, propsListener, children, setter, readonly, rendererMap = {}, Compositor } = this
-            .props as any
-        const Comp = defaultRenderer as any
+        const { id, render, childMap, getSetter = emptyGetSetter, readonly, rendererMap = {}, Compositor } = this.props
 
-        console.log('render:', id)
+        const anchor = (childMap && childMap[id]) || this.createEmptyAnchor()
+        const getElements = (operations: object[]) => {
+            const elements = anchor.nodes.map((node, index): React.ReactNode => {
+                const setProps = !readonly
+                    ? (props: object) => {
+                          getSetter()(id, (anchor = this.createEmptyAnchor()) => {
+                              const localNode = anchor.nodes[index] || { ...node }
+                              if (!localNode.props) {
+                                  localNode.props = {}
+                              }
 
-        const node = (children && children[id]) || { id }
+                              Object.keys(props).forEach((key) => {
+                                  return ((localNode.props as object)[key] = props[key])
+                              })
 
-        const setProps = !readonly
-            ? (props: object) => {
-                  setter()(id, (node: Node = { id }) => {
-                      node.props = { ...node.props, ...props }
+                              anchor.nodes[index] = localNode
 
-                      return node
-                  })
-              }
-            : () => {}
+                              return anchor
+                          })
+                      }
+                    : () => {}
 
-        let element = null
-        const props = node.props || {}
+                let element = null
 
-        if (typeof propsListener === 'function') {
-            propsListener(props, node, children)
+                const operation = operations[index] || {}
+
+                const props = { ...node.props || {}, ...operation }
+
+                if (!node.type && render) {
+                    element = render({ props, readonly, requestUpdateProps: setProps })
+                } else if (node.type) {
+                    const render = rendererMap[node.type]
+                    if (!render) {
+                        throw new Error('Can not find renderer of ' + node.type)
+                    }
+                    element = render({ props, readonly, requestUpdateProps: setProps })
+                } else {
+                    console.error('Something is wrong. Node.type should not be null')
+                    element = null
+                }
+
+                return (
+                    <ViewContext.Provider
+                        key={index}
+                        value={{ childMap: node.anchors, getSetter: this.getLens(index) }}
+                    >
+                        {element}
+                    </ViewContext.Provider>
+                )
+            })
+
+            return elements
         }
-
-        if (node.type === undefined) {
-            element = <Comp {...props} readonly={readonly} requestUpdateProps={setProps} />
-        } else if (node.type !== null) {
-            element = rendererMap[node.type](props, readonly, setProps)
-        } else {
-        }
-
         if (!readonly && Compositor) {
-            element = (
-                <Compositor setter={setter().bind(null, id)} rendererMap={rendererMap} node={node}>
-                    {element}
+            return (
+                <Compositor
+                    set={(setter) => {
+                        getSetter()(id, (anchor = this.createEmptyAnchor()) => {
+                            anchor.nodes = setter(anchor.nodes)
+
+                            return anchor
+                        })
+                    }}
+                    rendererMap={rendererMap}
+                    nodes={anchor.nodes}
+                >
+                    {(operations) => {
+                        return getElements(operations)
+                    }}
                 </Compositor>
             )
         }
 
-        return (
-            <ViewContext.Provider value={{ children: node.children, setter: this.getLens }}>
-                {element}
-            </ViewContext.Provider>
-        )
+        return getElements([])
     }
 }
 
-export const ViewWrapper: React.FunctionComponent<Props> = (props) => (
+const ViewWrapper: React.FunctionComponent<Props> = (props) => (
     <EditorContext.Consumer>
         {(editorContext) => (
             <ViewContext.Consumer>
-                {(viewContext) => {
-                    const p = {
-                        ...props,
-                        ...editorContext,
-                        ...viewContext,
-                    }
-
-                    return <V {...p} />
-                }}
+                {(viewContext) => <V {...{ ...editorContext, ...viewContext, ...props }} />}
             </ViewContext.Consumer>
         )}
     </EditorContext.Consumer>

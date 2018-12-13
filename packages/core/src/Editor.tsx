@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ChildMap, RendererMap, CompositorType } from './Types'
+import { ChildMap, RendererMap, CompositorType, SetterType } from './Types'
 import { EditorContext, ViewContext } from './contexts'
 import Data from './Data'
 
@@ -12,28 +12,36 @@ type EditorProps = {
     Compositor?: CompositorType
 }
 
-class Editor extends React.Component<EditorProps> {
-    setter: any
+class Editor extends React.Component<EditorProps, object> {
+    getSetter: () => (id: string, setter: SetterType) => void
 
-    constructor(props: any) {
+    operate: (operation: string, value: any) => void
+
+    constructor(props: EditorProps) {
         super(props)
 
-        this.setter = () => (id: string, setter: any) => {
-            const data: Data = !(this.props.data instanceof Data) ? new Data(this.props.data) : this.props.data
+        this.state = {}
 
-            if (this.props.onChange) {
-                this.props.onChange((data as Data).produce(id, setter))
+        this.getSetter = () => (id: string, setter: SetterType) => {
+            let { data = new Data() } = this.props
+            if (!(data instanceof Data)) {
+                data = new Data(data)
             }
+
+            this.props.onChange && this.props.onChange((data as Data).produce(id, setter))
+        }
+
+        this.operate = (operation, value) => {
+            this.setState({ [operation]: value })
         }
     }
 
     render() {
-        const { readonly = false, rendererMap, data = {}, children, Compositor }: EditorProps = this.props
+        const { readonly = false, rendererMap, children, Compositor } = this.props
 
-        let d = data
-
+        let { data = new Data() } = this.props
         if (!(data instanceof Data)) {
-            d = new Data(data)
+            data = new Data(data)
         }
 
         return (
@@ -42,12 +50,14 @@ class Editor extends React.Component<EditorProps> {
                     readonly,
                     rendererMap,
                     Compositor,
+                    operations: { ...this.state },
+                    operate: this.operate,
                 }}
             >
                 <ViewContext.Provider
                     value={{
-                        children: (d as Data).value,
-                        setter: this.setter,
+                        childMap: data.value,
+                        getSetter: this.getSetter,
                     }}
                 >
                     {children}

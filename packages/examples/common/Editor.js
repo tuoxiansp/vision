@@ -16,6 +16,8 @@ export default class ExampleEditor extends Component {
                     this.setState({ data })
                 }}
                 readonly={this.state.readonly}
+                operations={[ 'focused' ]}
+                {...this.props}
             >
                 <div
                     style={{
