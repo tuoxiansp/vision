@@ -2,7 +2,7 @@ import * as React from 'react'
 import { SetterType, Anchor, Renderer, ViewContextType, EditorContextType } from './Types'
 import { ViewContext, EditorContext } from './contexts'
 
-type Props = { id: string; renderer: Renderer }
+type Props = { id: string; render: Renderer }
 
 const emptyGetSetter = () => () => {}
 
@@ -69,15 +69,7 @@ class V extends React.Component<VProps> {
     }
 
     render() {
-        const {
-            id,
-            renderer,
-            childMap,
-            getSetter = emptyGetSetter,
-            readonly,
-            rendererMap = {},
-            Compositor,
-        } = this.props
+        const { id, render, childMap, getSetter = emptyGetSetter, readonly, rendererMap = {}, Compositor } = this.props
 
         const anchor = (childMap && childMap[id]) || this.createEmptyAnchor()
         const getElements = (operations: object[]) => {
@@ -107,17 +99,16 @@ class V extends React.Component<VProps> {
 
                 const props = { ...node.props || {}, ...operation }
 
-                if (!node.type && renderer) {
-                    const Comp = renderer
-                    element = <Comp {...props} readonly={readonly} requestUpdateProps={setProps} />
+                if (!node.type && render) {
+                    element = render({ props, readonly, requestUpdateProps: setProps })
                 } else if (node.type) {
-                    const Comp = rendererMap[node.type]
-                    if (!Comp) {
+                    const render = rendererMap[node.type]
+                    if (!render) {
                         throw new Error('Can not find renderer of ' + node.type)
                     }
-                    element = <Comp {...props} readonly={readonly} requestUpdateProps={setProps} />
+                    element = render({ props, readonly, requestUpdateProps: setProps })
                 } else {
-                    console.warn('Something is wrong. Node.type should not be null')
+                    console.error('Something is wrong. Node.type should not be null')
                     element = null
                 }
 

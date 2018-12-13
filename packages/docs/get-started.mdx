@@ -4,10 +4,12 @@ route: /get-started
 ---
 
 import { Playground } from 'docz'
-import { useState } from 'react'
+import { useState, Fragment } from 'react'
 import { Editor, View, Data } from '@visionjs/core'
 
 ## `<Editor>`
+> Create your own editor.
+
 A do-nothing editor:
 
 <Playground>
@@ -16,7 +18,7 @@ A do-nothing editor:
 
         return (
             <Editor data={data} onChange={setData}>
-                <h1>I'm big title .</h1>
+                <h1>title</h1>
                 <span>description</span>
             </Editor>
         )
@@ -24,39 +26,80 @@ A do-nothing editor:
 </Playground>
 
 ## `<View>`
+> Use existed renderers.
+
 You can use `<View>` to mount "renderers" that provide editorial abilities.
 
-```javascript
-import { Editor, View, Data } from '@visionjs/core'
-import React, { useState } from 'react'
-import { defaultProps } from 'recompose'
-import Text from '../../renderers/Text'
-
-const Title = defaultProps({ content: 'title' })(Text)
-const Description = defaultProps({ content: 'description' })(Text)
-
-export const Editable = () => {
-    const [ data, setData ] = useState(new Data())
-
-    return (
-        <Editor data={data} onChange={setData}>
-            <h1>
-                <View id="title" renderer={Title} />
-            </h1>
-            <View id="desccription" renderer={Description} />
-        </Editor>
-    )
-}
-```
-
-import { Editable } from './src/examples/get-started/Editor'
+import Text from './src/renderers/Text'
+import defaultProps from './src//utils/defaultProps'
 
 <Playground>
-    <Editable></Editable>
+    {() => {
+        const [ data, setData ] = useState(new Data())
+
+        return (
+            <Editor data={data} onChange={setData}>
+                <h1>
+                    <View id="title" render={defaultProps({ content: 'title' })(Text)} />
+                </h1>
+                <View id="description" render={defaultProps({ content: 'description' })(Text)} />
+            </Editor>
+        )
+    }}
 </Playground>
 
-## Self-edit Component
+## Self-edit Renderer
+> Customize renderers.
+
+Now let's add a selectable background color. We'll need to customize the renderer.  
+
+And Trust me, it's crazy simple.
+
+<Playground>
+    {() => {
+        const [ data, setData ] = useState(new Data())
+
+        return (
+            <Editor data={data} onChange={setData}>
+                <View id="hero" render={({readonly, requestUpdateProps, props}) => {
+                    const rainbow = [ '#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#8B00FF' ]
+
+                    return <div style={{
+                        backgroundColor: props.bgColor || '#FFF',
+                        position: 'relative'
+                    }}>
+                        {!readonly && (
+                            <div style={{ position: 'absolute', right: 42, top: 12 }}>
+                                {rainbow.map((color) => {
+                                    return (
+                                        <div
+                                            style={{
+                                                display: 'inline-block',
+                                                background: color,
+                                                width: 20,
+                                                height: 20,
+                                            }}
+                                            onClick={() => {
+                                                requestUpdateProps({ bgColor: color })
+                                            }}
+                                        />
+                                    )
+                                })}
+                            </div>
+                        )}
+                        <h1>
+                            <View id="title" render={defaultProps({ content: 'title' })(Text)} />
+                        </h1>
+                        <View id="description" render={defaultProps({ content: 'description' })(Text)} />
+                    </div> 
+                }}></View>
+            </Editor>
+        )
+    }}
+</Playground>
 
 ## Compositor
+Coming soon...
 
-## Registed Component
+## Registed Renderer
+Coming soon...

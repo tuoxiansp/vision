@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Editor, View } from '@visionjs/core'
 
-export default class Text extends Component {
+class Text extends Component {
     constructor(...args) {
         super(...args)
 
@@ -46,3 +46,9 @@ export default class Text extends Component {
         )
     }
 }
+
+const TextWrapper = ({ readonly, requestUpdateProps, props }) => (
+    <Text {...{ readonly, requestUpdateProps, ...props }} />
+)
+
+export default TextWrapper

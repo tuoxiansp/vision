@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Registry } from '@visionjs/core'
+import { View, unstable_Registry as Registry } from '@visionjs/core'
 import Text from '../renderers/Text'
 import Editor from '../common/Editor'
 import initCompositor from '../compositors/Compositor'
@@ -14,11 +14,11 @@ export default () => (
     <Editor rendererMap={r.map} Compositor={Compositor}>
         <div>
             text1:
-            <View id="text1" propsListener={(props) => console.log(props)} defaultRenderer={Text} />
+            <View id="text1" render={Text} />
             <div>
                 <div>
                     text2:
-                    <View id="text2" defaultRenderer={Text} />
+                    <View id="text2" render={Text} />
                 </div>
             </div>
         </div>

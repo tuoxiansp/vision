@@ -4,7 +4,7 @@ import './App.css'
 import { Inspector, useBooleanKnob, useColorKnob, useLog, setKnob, removeKnob } from 'retoggle'
 import { Editor, View, Data } from '@visionjs/core'
 import Text from '../../renderers/Text'
-import { defaultProps } from 'recompose'
+import defaultProps from '../../utils/defaultProps'
 
 const Desc = defaultProps({ content: 'A framework to create the WYSIWYG Web Page Editor of yours.' })(Text)
 const Title = defaultProps({ content: 'Vision' })(Text)
@@ -32,7 +32,7 @@ function useRangeKnob(name, { initialValue = 0, min = 0, max = 100 }) {
     return [ value, setValue ]
 }
 
-function App({ color = '#61DAFB', requestUpdateProps, readonly }) {
+function app({ props: { color = '#61DAFB' }, requestUpdateProps, readonly }) {
     const rainbow = [ '#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#8B00FF' ]
 
     return (
@@ -67,10 +67,10 @@ function App({ color = '#61DAFB', requestUpdateProps, readonly }) {
                     </svg>
                 </div>
                 <h1>
-                    <View id="title" renderer={Title} />
+                    <View id="title" render={Title} />
                 </h1>
                 <p>
-                    <View id="description" renderer={Desc} />
+                    <View id="description" render={Desc} />
                 </p>
             </header>
         </div>
@@ -114,12 +114,12 @@ function Demo() {
             readonly={readonly}
             data={data}
             onChange={(data) => {
-                setData(data)
                 setRange(range + 1)
+                setData(data)
             }}
         >
             <Inspector />
-            <View id="app" renderer={App} />
+            <View id="app" render={app} />
         </Editor>
     )
 }
