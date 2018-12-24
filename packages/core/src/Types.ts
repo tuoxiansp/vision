@@ -1,5 +1,4 @@
 import { ComponentType, ReactNode } from 'react'
-import { object } from 'prop-types'
 
 export type ChildMap = {
     [K: string]: Anchor | undefined
@@ -15,11 +14,6 @@ export type Node = {
     props?: object
     anchors?: ChildMap
 }
-
-// export type Renderer = ComponentType<{
-//     readonly: boolean
-//     requestUpdateProps: (props: object) => void
-// }>
 
 export type Renderer = (
     context: { readonly: boolean; requestUpdateProps: (props: object) => void; props: object }

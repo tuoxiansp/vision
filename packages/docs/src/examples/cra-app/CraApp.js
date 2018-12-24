@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
 
-import { Inspector, useBooleanKnob, useColorKnob, useLog, setKnob, removeKnob } from 'retoggle'
+import { Inspector, useBooleanKnob, useColorKnob, useLog, setKnob, removeKnob } from '../../libs/retoggle/lib/index.ts'
 import { Editor, View, Data } from '@visionjs/core'
 import Text from '../../renderers/Text'
 import defaultProps from '../../utils/defaultProps'
