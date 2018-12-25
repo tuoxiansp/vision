@@ -97,16 +97,24 @@ class V extends React.Component<VProps> {
 
                 const operation = operations[index] || {}
 
-                const props = { ...node.props || {}, ...operation }
+                const props = { ...node.props || {} }
+
+                const context = {
+                    props,
+                    readonly,
+                    requestUpdateProps: setProps,
+                    ...operation,
+                    ...{ size: anchor.nodes.length, index },
+                }
 
                 if (!node.type && render) {
-                    element = render({ props, readonly, requestUpdateProps: setProps })
+                    element = render(context)
                 } else if (node.type) {
                     const render = rendererMap[node.type]
                     if (!render) {
                         throw new Error('Can not find renderer of ' + node.type)
                     }
-                    element = render({ props, readonly, requestUpdateProps: setProps })
+                    element = render(context)
                 } else {
                     console.error('Something is wrong. Node.type should not be null')
                     element = null
