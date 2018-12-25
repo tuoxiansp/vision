@@ -1,6 +1,6 @@
 {
     "name": "docs",
-    "version": "2.0.0-alpha.0",
+    "version": "2.0.0-alpha.1",
     "private": true,
     "description": "",
     "main": "index.js",
@@ -13,7 +13,7 @@
     "license": "ISC",
     "dependencies": {
         "@smooth-ui/core-sc": "^7.0.5",
-        "@visionjs/core": "^2.0.0-alpha.0",
+        "@visionjs/core": "^2.0.0-alpha.1",
         "docz": "^0.12.14",
         "docz-plugin-css": "^0.11.0",
         "react": "16.7.0-alpha.2",

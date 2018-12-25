@@ -1,9 +1,9 @@
 {
     "name": "hypo",
-    "version": "2.0.0-alpha.0",
+    "version": "2.0.0-alpha.1",
     "private": true,
     "dependencies": {
-        "@visionjs/core": "^2.0.0-alpha.0",
+        "@visionjs/core": "^2.0.0-alpha.1",
         "@visionjs/inspector": "^1.0.0",
         "antd": "^3.10.9",
         "react": "^16.7.0-alpha.2",
