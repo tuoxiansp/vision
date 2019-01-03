@@ -1,4 +1,15 @@
 # vision
-An engine for create the WYSIWYG Web Page Editor of yours
+A framework to create the WYSIWYG Web Page Editor of yours.
 
-[preview](https://static.ucloud.cn/56208f635d4b44dd83d753d9735947fa.mp4)
+```sh
+npm install @visionjs/core
+```
+
+## [Docs](https://dist-dtvwgiqbaz.now.sh/)
+**See the documentation at [https://dist-dtvwgiqbaz.now.sh/](https://dist-dtvwgiqbaz.now.sh/)** for more information about using Vision!
+
+## [Demo](https://build-wwevmcerlw.now.sh)
+
+## License
+
+Licensed under the MIT License, Copyright © 2018-present Visionjs.
