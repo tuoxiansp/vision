@@ -1,15 +1,62 @@
 # vision
-A framework to create the WYSIWYG Web Page Editor of yours.
+> 可视化网页编辑器引擎
+
+vision 是基于 React 的可视化网页编辑器框架，你可以在此基础上，快速、可靠地搭建自己的网页编辑器。
+
+![](screen.gif)
+
+## 特性
+
+- 简单易用。
+- 高可定制。
+- 高性能。
+- 尺寸小（10 KB gziped）。
+
+## 安装
 
 ```sh
-npm install @visionjs/core
+npm install @visionjs/core --save
 ```
 
-## [Docs](https://dist-dtvwgiqbaz.now.sh/)
-**See the documentation at [https://dist-dtvwgiqbaz.now.sh/](https://dist-dtvwgiqbaz.now.sh/)** for more information about using Vision!
+## 使用
 
-## [Demo](https://build-wwevmcerlw.now.sh)
+### 代码味道
+
+```javascript
+import React, { useState } from 'react'
+import { Editor, View, Data } from '@visionjs/core'
+import Text from 'renderers/Text'
+
+const defaultProps = (params) => (renderer) => ({ readonly, requestUpdateProps, props }) =>
+    renderer({ readonly, requestUpdateProps, props: { ...params, ...props } })
+
+() => {
+  const [data, setData] = useState(new Data())
+
+  return (
+    <Editor data={data} onChange={setData}>
+      <h1>
+        <View id="title" render={defaultProps({ content: 'title' })(Text)} />
+      </h1>
+      <View
+        id="description"
+        render={defaultProps({ content: 'description' })(Text)}
+      />
+    </Editor>
+  )
+}
+```
+
+## 文档
+
+文档参考：https://dist-dtvwgiqbaz.now.sh/#/
+
+## 相关信息
+
+qq 群: 730672328  
+
+demo: ![https://build-wwevmcerlw.now.sh/](https://build-wwevmcerlw.now.sh/)  
 
 ## License
 
-Licensed under the MIT License, Copyright © 2018-present Visionjs.
+Licensed under the MIT License, Copyright © 2018-present tuoxiansp.
