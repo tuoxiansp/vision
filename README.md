@@ -7,10 +7,10 @@ vision 是基于 React 的可视化网页编辑器框架，你可以在此基础
 
 ## 特性
 
-- 简单易用。
-- 高可定制。
-- 高性能。
-- 尺寸小（10 KB gziped）。
+- 简单易用
+- 高可定制
+- 高性能
+- 尺寸小（10 KB gziped）
 
 ## 安装
 
@@ -20,8 +20,6 @@ npm install @visionjs/core --save
 
 ## 使用
 
-### 代码味道
-
 ```javascript
 import React, { useState } from 'react'
 import { Editor, View, Data } from '@visionjs/core'
@@ -30,6 +28,8 @@ import Text from 'renderers/Text'
 const defaultProps = (params) => (renderer) => ({ readonly, requestUpdateProps, props }) =>
     renderer({ readonly, requestUpdateProps, props: { ...params, ...props } })
 
+//...
+//my editor
 () => {
   const [data, setData] = useState(new Data())
 
@@ -55,8 +55,8 @@ const defaultProps = (params) => (renderer) => ({ readonly, requestUpdateProps, 
 
 qq 群: 730672328  
 
-demo: ![https://build-wwevmcerlw.now.sh/](https://build-wwevmcerlw.now.sh/)  
+demo: https://build-wwevmcerlw.now.sh/
 
 ## License
 
-Licensed under the MIT License, Copyright © 2018-present tuoxiansp.
+Licensed under the MIT License, Copyright © 2018-present 陈雨童.
