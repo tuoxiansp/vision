@@ -1,0 +1,32 @@
+---
+menu: API References
+name: Editor
+route: /api-references/editor
+---
+
+### Editor
+
+`<Editor>` 是编辑器最外层组件，用于从外部控制编辑器的状态。
+
+#### Usage
+
+```javascript
+import { Editor } from '@visionjs/core'
+
+//...
+
+() => {
+    return <Editor data onChange>{/** views **/}</Editor>
+}
+```
+
+#### Props
+
+| Property    | Type          | Required | Default  | Description              |
+|-------------|---------------|----------|----------|--------------------------|
+| readonly    | Boolean       | false    | false    | 指示是否为编辑模式       |
+| data        | Data          | false    | new Data | 界面数据                 |
+| onChange    | Function      | false    |          | 监听界面数据变化         |
+| children    | ReactNode     | false    |          |                          |
+| rendererMap | Object        | false    |          | Renderer 映射表          |
+| Compositor  | ComponentType | false    |          | 排版器，用于统一排版交互 |

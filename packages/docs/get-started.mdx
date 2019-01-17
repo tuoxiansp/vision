@@ -7,10 +7,16 @@ import { Playground } from 'docz'
 import { useState, Fragment } from 'react'
 import { Editor, View, Data } from '@visionjs/core'
 
-## `<Editor>`
-> Create your own editor.
+# 快速开始
 
-A do-nothing editor:
+我们从创建一个可编辑网页模板起步，一步步学习 vision 引擎的使用。  
+
+当然，vision 引擎的潜力远不止于此。它可以用于创建更具想象力的产品。
+
+## `<Editor>`
+> 我们先来创建一个 Editor 。
+
+Editor 组件是一个全受控组件，它非常像原生的 `<input value onChange>` 组件。只需把页面数据作为 `data` 参数输入，`<Editor>` 就会输出相应的界面。
 
 <Playground>
     {() => {
@@ -26,9 +32,10 @@ A do-nothing editor:
 </Playground>
 
 ## `<View>`
-> Use existed renderers.
+> 使用 View 组件挂载我们事先准备好的 Renderer .
 
-You can use `<View>` to mount "renderers" that provide editorial abilities.
+在模板的开发过程中，绝大部分情况下，我们只需把可以编辑的内容更改为 `<View>` 组件，并使用 `<View>` 组件挂载与内容类型对应的 `Renderer` 。  
+我们这里要使 `<h1>` 和 `<span>` 可编辑，只需把它们替换为 `Text`，并使用 `<View>` 挂载即可。
 
 import Text from './src/renderers/Text'
 import defaultProps from './src//utils/defaultProps'
@@ -48,12 +55,10 @@ import defaultProps from './src//utils/defaultProps'
     }}
 </Playground>
 
-## Self-edit Renderer
-> Customize renderers.
+## 自编辑 Renderer
+> 定义自己的 Renderer 。
 
-Now let's add a selectable background color. We'll need to customize the renderer.  
-
-And Trust me, it's crazy simple.
+我们再来写点编辑逻辑，让这段 UI 拥有彩虹背景。
 
 <Playground>
     {() => {
@@ -98,8 +103,11 @@ And Trust me, it's crazy simple.
     }}
 </Playground>
 
-## Compositor
-Coming soon...
+Renderer 本质就是一个的函数。它接受三个参数:  
+- readonly: 指示当前是否为可编辑模式
+- requestUpdateProps: 修改输入到自身的 `props`
+- props: 输入的 `props`
 
-## Registed Renderer
-Coming soon...
+一句话描述 Renderer 要做的事情：根据传入的 `props` 返回对应的视图。  
+当 `readonly === false` 时，使用合适的交互引导用户来编辑输入自身的 `props` 。  
+当 `readonly === true` 时，注意隐藏编辑交互。

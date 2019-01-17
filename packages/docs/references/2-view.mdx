@@ -1,0 +1,31 @@
+---
+menu: API References
+name: View
+route: /api-references/view
+---
+
+### View
+
+`<View>` 组件用于挂载 Renderer 。注意同一个 Context 下，`<View>` 应该唯一。
+
+#### Usage
+
+```javascript
+import { View } from '@visionjs/core'
+import Text from 'renderers/Text'
+
+//...
+
+() => {
+    return <Editor data onChange>
+        <View id="title" render={Text}></View>
+    </Editor>
+}
+```
+
+#### Props
+
+| Property | Type     | Required | Default | Description                |
+|----------|----------|----------|---------|----------------------------|
+| id       | String   | true     |         | ID，当前上下文应保持唯一。 |
+| render   | Function | true     |         | 渲染函数                   |

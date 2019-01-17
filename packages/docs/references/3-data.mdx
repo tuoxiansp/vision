@@ -1,0 +1,36 @@
+---
+menu: API References
+name: Data
+route: /api-references/data
+---
+
+### Data
+
+数据类。
+
+- `value` - 页面数据。一个 js object，不可修改。
+- `convert(value)` - 强制把 Data 对象数据变更为传入的值
+- `undo()` - 撤销，返回 Data 对象
+- `undoable` - 返回撤销栈的长度。长度为 0 时，不可撤销
+- `redo()` - 重做，返回 Data 对象
+- `redoable` - 返回重做栈的长度，长度为 0 时，不可重做
+
+#### Usage
+
+```javascript
+import React, {useState} from 'react'
+import { Editor, View, Data } from '@visionjs/core'
+import Text from 'renderers/Text'
+
+//...
+
+() => {
+    const {data, setData} = useState(new Data())
+
+    return <Editor data={data} onChange={setData}>
+        <button onClick={() => {setData(data.undo())}}>undo</button>
+        <button onClick={() => {setData(data.redo())}}>redo</button>
+        <View id="title" render={Text}></View>
+    </Editor>
+}
+```

@@ -1,10 +1,10 @@
 import { css } from 'docz-plugin-css'
 
 export default {
+    typescript: true,
     title: 'Vision',
     description: 'Vision is a completely customizable framework for building WYSIWYG HTML editors',
     themeConfig: {
-        repository: 'https://github.com/smooth-code/smooth-ui',
         colors: {
             primary: '#223f5a',
             link: '#1c25cc',
@@ -22,9 +22,8 @@ export default {
             },
         },
     },
-    menu: [ 'Home', 'Get Started' ],
+    menu: [ 'Home', 'Get Started', 'Advanced', 'API References' ],
     plugins: [ css() ],
-    debug: true,
     codeSandbox: false,
     hashRouter: true,
     typescript: true,
