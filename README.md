@@ -50,7 +50,7 @@ const defaultProps = (params) => (renderer) => ({ readonly, requestUpdateProps, 
 
 ## 文档
 
-文档参考：https://dist-dtvwgiqbaz.now.sh/#/
+文档参考：https://visionjs.netlify.com/
 
 ## 相关信息
 
