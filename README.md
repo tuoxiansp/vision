@@ -56,7 +56,7 @@ const defaultProps = (params) => (renderer) => ({ readonly, requestUpdateProps, 
 
 qq 群: 730672328  
 
-demo: https://build-wwevmcerlw.now.sh/
+demo: https://example-landing-vision.netlify.com/
 
 ## License
 
