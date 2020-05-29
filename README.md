@@ -1,25 +1,27 @@
 # vision
-> 可视化网页编辑器引擎
 
-vision 是基于 React 的可视化网页编辑器开发框架，你可以在此基础上，快速、可靠地开发出自己的网页编辑器。
+> A framework to create the WYSIWYG Web Page Editor of yours.
+
+Vision is a web builder framework based on React. You can develop your own productive-ready web builder quickly. Unlike most web builder framework, you can expand vision with pure react. It's crazy simple, all you need to do is writing react component.
 
 ![](screen.gif)
 
-## 特性
+## Features
 
-- 简单易用
-- 高可扩展
-- 高性能
-- 无侵入
-- 尺寸小（10 KB gziped）
+- crazy simple
+- fully customizable
+- high performance
+- non invasive
+- undo/redo were ready
+- only 10 KB gziped
 
-## 安装
+## Install
 
 ```sh
 npm install @visionjs/core --save
 ```
 
-## 使用
+## Usage
 
 ```javascript
 import React, { useState } from 'react'
@@ -48,16 +50,20 @@ const defaultProps = (params) => (renderer) => ({ readonly, requestUpdateProps, 
 }
 ```
 
-## 文档
+## Documentation
 
-文档参考：https://visionjs.netlify.com/
+https://visionjs.netlify.com/
 
-## 相关信息
+## Demo
 
-qq 群: 730672328  
+https://example-landing-vision.netlify.com/
 
-demo: https://example-landing-vision.netlify.com/
+## Contact to author
+
+*QQ-Group: 730672328*  
+
+*email: b1ncer@foxmail.com*
 
 ## License
 
-Licensed under the MIT License, Copyright © 2018-present 陈雨童.
+Licensed under the MIT License, Copyright © 2018-present tuoxiansp.
