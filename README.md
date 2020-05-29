@@ -2,7 +2,7 @@
 
 > A framework to create the WYSIWYG Web Page Editor of yours.
 
-Vision is a web builder framework based on React. You can develop your own productive-ready web builder quickly. Unlike most web builder framework, you can expand vision with pure react. It's crazy simple, all you need to do is writing react component.
+Vision is a web builder framework based on React. You can develop your own productive-ready web builder quickly. Unlike most web builder framework, you can expand vision with pure react. It's crazy simple, all you need to do is writing react component. And it's powerful, you can handling the interactions (eg. TabView) gracefully.
 
 ![](screen.gif)
 
